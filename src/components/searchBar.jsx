@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+//componente de busqueda, recivbe una fucnion que toma el nombre de la ciudad y se lo pasa al hook para obtener la informacion
 const SearchBar = ({ onSearch }) => {
     const [city, setCity] = useState("");
 

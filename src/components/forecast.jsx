@@ -1,4 +1,5 @@
 
+// componente que muestra el pronostico de las siguientes horas
 const Forecast = ({ hourly }) => {
     if (!hourly) return null;
 
