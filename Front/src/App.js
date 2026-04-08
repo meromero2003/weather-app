@@ -54,8 +54,9 @@ function App() {
   }
 
   return (
-    <div style={{ padding: "20px"}}>
-      <h1>Weather App 🌤️</h1>
+    <div style={{ padding: "20px", fontFamily:"Arial", background:"linear-gradient(to bottom, #2b47c4, #b0b311)", minHeight:"100vh", maxHeight:"400px", margin:"0 auto", color:"white"}}>
+      <h1 style={{ fontSize:"60px", fontWeight:"bold", margin:"10px 0" }}>
+        Weather App 🌤️</h1>
 
       {/* llama a componente de busqueda que tiene la logica de busqueda */}
       <SearchBar city={city} setCity={setCity} onSearch={fetchWeather} />
