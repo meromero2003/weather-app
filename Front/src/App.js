@@ -6,6 +6,8 @@ import {useWeather} from './hooks/useWeather';
 import { useEffect, useState } from 'react';
 import ThemeToogle from './components/ThemeToogle';
 import LocationButton from './components/LocationButton';
+import SkeletonForecast from './components/SkeletonForecast';
+import SkeletonCard from './components/SkeletonCard';
 
 
 function App() {
@@ -65,46 +67,6 @@ function App() {
     }
   }
 
-  // const fetchByLocation = () => {
-  //   if(!navigator.geolocation){
-  //     setError("Geolocation not suported");
-  //     return;
-  //   }
-
-  //   navigator.geolocation.getCurrentPosition(
-  //     async(position) =>{
-  //       try{
-  //         setLoading(true);
-  //         setError(null);
-
-  //         const lat= position.coords.latitude;
-  //         const lon= position.coords.longitude;
-
-  //         // const response= await fetch(
-  //         //   `http://localhost:5000/weather?lat=${lat}&lon=${lon}`
-  //         // );
-
-  //         // const result= await response.json();
-
-  //         fetchWeather(`lat=${lat}&lon=${lon}`);
-
-  //         if(result.error){
-  //           setError(result.error);
-  //           setData(null);
-  //           return;
-  //         }
-  //         setData(result);
-  //       } catch (error){
-  //         setError("Error getting location weather");
-  //       }finally{
-  //         setLoading(false);
-  //       }
-  //     },
-  //     ()=>{
-  //       setError("Location persmission denied");
-  //     }
-  //   );
-  // };
 
   const fetchByLocation = () => {
       if (!navigator.geolocation) {
@@ -150,7 +112,13 @@ function App() {
         <LocationButton onClick={fetchByLocation} />
       </div>
 
-      {loading && <p>Loading...⏳</p>}
+      {loading && (
+        <>
+          <SkeletonCard />
+          <SkeletonForecast />
+        </>
+      )}
+
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {data && (
