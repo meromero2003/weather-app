@@ -13,7 +13,7 @@ const Forecast = ({ hourly }) => {
                         borderRadius:"15px", padding:"10px", textAlign:"center", 
                         backdropFilter:"blur(10px)", boxShadow:"0 4px 16px rgba(0,0,0,0.)"}}>
 
-                        <p>{new Date(hour.time).toLocaleTimeString([], { 
+                        <p>{new Date(hour.time).toLocaleTimeString("en-US", { 
                             hour: '2-digit', 
                             minute: '2-digit' })}
                         </p>
