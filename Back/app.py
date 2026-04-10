@@ -16,8 +16,11 @@ def weather():
     
     data= get_weather(city)
 
+    if not data:
+        return jsonify({"error": "Failed to fetch weather"}), 500
+
     if "error" in data:
-        return jsonify({data}),400
+        return jsonify(data), 400  
     
     return jsonify(data),200
     

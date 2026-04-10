@@ -5,6 +5,7 @@ import WeatherCard from './components/WeatherCard';
 import {useWeather} from './hooks/useWeather';
 import { useEffect, useState } from 'react';
 import ThemeToogle from './components/ThemeToogle';
+import LocationButton from './components/LocationButton';
 
 
 function App() {
@@ -30,8 +31,8 @@ function App() {
     localStorage.setItem("theme", isDark ? "dark" : "light");
   }, [isDark]);
 
-  const fetchWeather = async (city) => {
-    if (!city){
+  const fetchWeather = async (query) => {
+    if (!query || !query.trim()){
       setError("Enter a city");
       return;
     }
@@ -41,7 +42,7 @@ function App() {
       setError(null);
 
       const response = await fetch(
-        `http://localhost:5000/weather?city=${encodeURIComponent(city)}`
+        `http://localhost:5000/weather?city=${encodeURIComponent(query)}`
       );      
       
       const result= await response.json();
@@ -64,6 +65,67 @@ function App() {
     }
   }
 
+  // const fetchByLocation = () => {
+  //   if(!navigator.geolocation){
+  //     setError("Geolocation not suported");
+  //     return;
+  //   }
+
+  //   navigator.geolocation.getCurrentPosition(
+  //     async(position) =>{
+  //       try{
+  //         setLoading(true);
+  //         setError(null);
+
+  //         const lat= position.coords.latitude;
+  //         const lon= position.coords.longitude;
+
+  //         // const response= await fetch(
+  //         //   `http://localhost:5000/weather?lat=${lat}&lon=${lon}`
+  //         // );
+
+  //         // const result= await response.json();
+
+  //         fetchWeather(`lat=${lat}&lon=${lon}`);
+
+  //         if(result.error){
+  //           setError(result.error);
+  //           setData(null);
+  //           return;
+  //         }
+  //         setData(result);
+  //       } catch (error){
+  //         setError("Error getting location weather");
+  //       }finally{
+  //         setLoading(false);
+  //       }
+  //     },
+  //     ()=>{
+  //       setError("Location persmission denied");
+  //     }
+  //   );
+  // };
+
+  const fetchByLocation = () => {
+      if (!navigator.geolocation) {
+        setError("Geolocation not supported");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        fetchWeather(`${lat},${lon}`);
+      },
+      () => {
+        setError("Location permission denied");
+      }
+    );
+  }
+
+
+
   const theme = {
     background: isDark
       ? "linear-gradient(to bottom, #283981, #5c3880)"
@@ -83,7 +145,10 @@ function App() {
         Weather App 🌤️</h1>
 
       {/* llama a componente de busqueda que tiene la logica de busqueda */}
-      <SearchBar city={city} setCity={setCity} onSearch={fetchWeather} />
+      <div style={{display:"flex"}}>
+        <SearchBar city={city} setCity={setCity} onSearch={fetchWeather} />
+        <LocationButton onClick={fetchByLocation} />
+      </div>
 
       {loading && <p>Loading...⏳</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
